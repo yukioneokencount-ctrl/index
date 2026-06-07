@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青と夏</title>
+
+<style>
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(#8fd3ff, #fff7c2);
+  font-family:"Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  text-align:center;
+  color:#1f5f8b;
+  overflow:hidden;
+}
+
+.card{
+  margin:40px auto;
+  padding:28px 22px 34px;
+  max-width:380px;
+  background:rgba(255,255,255,0.82);
+  border-radius:34px;
+  box-shadow:0 12px 35px rgba(0,0,0,0.12);
+  position:relative;
+  z-index:2;
+}
+
+.label{
+  font-size:13px;
+  letter-spacing:4px;
+  color:#f6a623;
+}
+
+h1{
+  font-size:46px;
+  margin:8px 0 22px;
+  letter-spacing:4px;
+}
+
+img{
+  width:290px;
+  max-width:88%;
+  border-radius:28px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.12);
+}
+
+button{
+  margin-top:26px;
+  font-size:22px;
+  letter-spacing:3px;
+  padding:17px 48px;
+  border-radius:999px;
+  border:none;
+  background:#ffcf33;
+  color:#1f5f8b;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 7px 0 #f2a900;
+}
+
+button:active{
+  transform:translateY(5px);
+  box-shadow:0 2px 0 #f2a900;
+}
+
+.nowplaying{
+  margin-top:20px;
+  font-size:14px;
+  letter-spacing:3px;
+  opacity:0;
+}
+
+.nowplaying.show{
+  opacity:1;
+}
+
+.sun{
+  position:absolute;
+  top:28px;
+  right:32px;
+  font-size:54px;
+  animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-10px); }
+}
+
+.sparkle{
+  position:absolute;
+  font-size:26px;
+  opacity:0;
+  animation:spark 1.2s ease-out forwards;
+}
+
+@keyframes spark{
+  0%{ transform:scale(0.4) translateY(0); opacity:0; }
+  30%{ opacity:1; }
+  100%{ transform:scale(1.4) translateY(-70px); opacity:0; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="sun">☀️</div>
+
+<div class="card">
+  <div class="label">SUMMER CANDIDATE</div>
+  <h1>青と夏</h1>
+
+  <img src="青と夏.jpg">
+
+  <br>
+
+  <button onclick="playSong()">LISTEN</button>
+
+  <div id="text" class="nowplaying">♪ SUMMER IS PLAYING...</div>
+
+  <audio id="song">
+    <source src="青と夏.m4a" type="audio/mp4">
+  </audio>
+</div>
+
+<script>
+function playSong(){
+  const song = document.getElementById("song");
+  song.currentTime = 0;
+  song.play();
+
+  document.getElementById("text").classList.add("show");
+
+  for(let i = 0; i < 16; i++){
+    const s = document.createElement("div");
+    s.className = "sparkle";
+    s.innerHTML = ["☀️","✨","🌻","💙"][Math.floor(Math.random()*4)];
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.top = (60 + Math.random() * 30) + "vh";
+    document.body.appendChild(s);
+
+    setTimeout(() => {
+      s.remove();
+    }, 1300);
+  }
+}
+</script>
+
+</body>
+</html>
