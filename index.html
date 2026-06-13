@@ -44,7 +44,7 @@
       background: #000;
     }
 
-    /* 縦動画：青い余白を出さず全画面で表示 */
+    /* 縦動画：余白なし全画面 */
     .movie {
       position: fixed;
       inset: 0;
@@ -72,7 +72,7 @@
     .intro-bg {
       position: absolute;
       inset: -24px;
-      background-image: url("青と夏.jpg");
+      background-image: url("aotonatsu.jpg");
       background-size: cover;
       background-position: center;
       filter: blur(24px);
@@ -359,7 +359,7 @@
     <video
       class="movie"
       id="movie"
-      src="青と夏.mp4"
+      src="aotonatsu.mp4"
       playsinline
       webkit-playsinline
       preload="metadata"
@@ -383,7 +383,7 @@
       <div class="listen-card">
         <div class="label">NOW LISTENING</div>
         <h1 class="song-title">青と夏</h1>
-        <img class="jacket" src="青と夏.jpg" alt="青と夏">
+        <img class="jacket" src="aotonatsu.jpg" alt="青と夏">
         <button class="play-button" id="playButton">PLAY</button>
       </div>
     </div>
@@ -423,9 +423,9 @@
       playButton.disabled = true;
 
       page.classList.remove("is-finished");
+
       movie.pause();
       movie.currentTime = 0;
-      movie.load();
 
       page.classList.add("is-playing");
 
