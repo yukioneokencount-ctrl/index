@@ -3,71 +3,87 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>青と夏</title>
+<title>Candidate B</title>
 
 <style>
 body{
   margin:0;
   min-height:100vh;
-  background:linear-gradient(#8fd3ff, #fff7c2);
-  font-family:"Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
-  text-align:center;
-  color:#1f5f8b;
   overflow:hidden;
+  text-align:center;
+  font-family:"Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  background:linear-gradient(#79cdfa 0%, #dff6ff 55%, #fff1a8 100%);
+  color:#155f93;
+}
+
+.cloud{
+  position:absolute;
+  font-size:58px;
+  opacity:0.75;
+  animation:cloudMove 18s linear infinite;
+}
+
+.cloud.one{ top:70px; left:-120px; }
+.cloud.two{ top:150px; left:-220px; animation-delay:6s; font-size:42px; }
+
+@keyframes cloudMove{
+  from{ transform:translateX(0); }
+  to{ transform:translateX(120vw); }
 }
 
 .card{
-  margin:40px auto;
-  padding:28px 22px 34px;
-  max-width:380px;
-  background:rgba(255,255,255,0.82);
-  border-radius:34px;
-  box-shadow:0 12px 35px rgba(0,0,0,0.12);
   position:relative;
   z-index:2;
+  margin:55px auto;
+  padding:30px 22px 36px;
+  max-width:380px;
+  background:rgba(255,255,255,0.83);
+  border-radius:34px;
+  box-shadow:0 14px 36px rgba(0,0,0,0.13);
 }
 
 .label{
-  font-size:13px;
+  font-size:12px;
   letter-spacing:4px;
-  color:#f6a623;
+  color:#f4a900;
+  font-weight:bold;
 }
 
 h1{
-  font-size:46px;
-  margin:8px 0 22px;
-  letter-spacing:4px;
+  font-size:42px;
+  margin:12px 0 22px;
+  letter-spacing:5px;
 }
 
 img{
-  width:290px;
+  width:285px;
   max-width:88%;
   border-radius:28px;
-  box-shadow:0 8px 24px rgba(0,0,0,0.12);
+  box-shadow:0 10px 25px rgba(0,0,0,0.14);
 }
 
 button{
-  margin-top:26px;
-  font-size:22px;
+  margin-top:28px;
+  font-size:20px;
   letter-spacing:3px;
   padding:17px 48px;
   border-radius:999px;
   border:none;
-  background:#ffcf33;
-  color:#1f5f8b;
+  background:#ffd43b;
+  color:#155f93;
   font-weight:bold;
   cursor:pointer;
-  box-shadow:0 7px 0 #f2a900;
+  box-shadow:0 7px 0 #efa900;
 }
 
 button:active{
   transform:translateY(5px);
-  box-shadow:0 2px 0 #f2a900;
+  box-shadow:0 2px 0 #efa900;
 }
 
 .nowplaying{
   margin-top:20px;
-  font-size:14px;
+  font-size:13px;
   letter-spacing:3px;
   opacity:0;
 }
@@ -76,47 +92,36 @@ button:active{
   opacity:1;
 }
 
-.sun{
+.flower{
   position:absolute;
-  top:28px;
-  right:32px;
-  font-size:54px;
-  animation:float 3s ease-in-out infinite;
+  font-size:28px;
+  animation:flowerUp 1.7s ease-out forwards;
+  pointer-events:none;
+  z-index:5;
 }
 
-@keyframes float{
-  0%,100%{ transform:translateY(0); }
-  50%{ transform:translateY(-10px); }
-}
-
-.sparkle{
-  position:absolute;
-  font-size:26px;
-  opacity:0;
-  animation:spark 1.2s ease-out forwards;
-}
-
-@keyframes spark{
-  0%{ transform:scale(0.4) translateY(0); opacity:0; }
-  30%{ opacity:1; }
-  100%{ transform:scale(1.4) translateY(-70px); opacity:0; }
+@keyframes flowerUp{
+  0%{ transform:translateY(0) rotate(0deg) scale(0.6); opacity:0; }
+  20%{ opacity:1; }
+  100%{ transform:translateY(-130px) rotate(220deg) scale(1.4); opacity:0; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="sun">☀️</div>
+<div class="cloud one">☁️</div>
+<div class="cloud two">☁️</div>
 
 <div class="card">
-  <div class="label">SUMMER CANDIDATE</div>
-  <h1>青と夏</h1>
+  <div class="label">RE-ENTRY SONG QUIZ</div>
+  <h1>Candidate B</h1>
 
   <img src="青と夏.jpg">
 
   <br>
 
-  <button onclick="playSong()">LISTEN</button>
+  <button id="playButton" onclick="playSong()">LISTEN</button>
 
   <div id="text" class="nowplaying">♪ SUMMER IS PLAYING...</div>
 
@@ -128,23 +133,32 @@ button:active{
 <script>
 function playSong(){
   const song = document.getElementById("song");
+  const button = document.getElementById("playButton");
+
   song.currentTime = 0;
   song.play();
 
+  button.innerHTML = "NOW PLAYING";
   document.getElementById("text").classList.add("show");
 
-  for(let i = 0; i < 16; i++){
-    const s = document.createElement("div");
-    s.className = "sparkle";
-    s.innerHTML = ["☀️","✨","🌻","💙"][Math.floor(Math.random()*4)];
-    s.style.left = Math.random() * 100 + "vw";
-    s.style.top = (60 + Math.random() * 30) + "vh";
-    document.body.appendChild(s);
+  for(let i = 0; i < 22; i++){
+    const flower = document.createElement("div");
+    flower.className = "flower";
+    flower.innerHTML = ["🌻","✨","☀️","💙"][Math.floor(Math.random()*4)];
+    flower.style.left = Math.random() * 100 + "vw";
+    flower.style.top = (65 + Math.random() * 25) + "vh";
+    document.body.appendChild(flower);
 
     setTimeout(() => {
-      s.remove();
-    }, 1300);
+      flower.remove();
+    }, 1800);
   }
+
+  setTimeout(() => {
+    song.pause();
+    song.currentTime = 0;
+    button.innerHTML = "LISTEN";
+  }, 15000);
 }
 </script>
 
