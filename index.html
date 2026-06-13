@@ -1,166 +1,370 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Candidate B</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<style>
-body{
-  margin:0;
-  min-height:100vh;
-  overflow:hidden;
-  text-align:center;
-  font-family:"Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
-  background:linear-gradient(#79cdfa 0%, #dff6ff 55%, #fff1a8 100%);
-  color:#155f93;
-}
+  <title>青と夏</title>
 
-.cloud{
-  position:absolute;
-  font-size:58px;
-  opacity:0.75;
-  animation:cloudMove 18s linear infinite;
-}
+  <!-- 手書き風フォント -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
 
-.cloud.one{ top:70px; left:-120px; }
-.cloud.two{ top:150px; left:-220px; animation-delay:6s; font-size:42px; }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-@keyframes cloudMove{
-  from{ transform:translateX(0); }
-  to{ transform:translateX(120vw); }
-}
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #3792f2;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      color: white;
+    }
 
-.card{
-  position:relative;
-  z-index:2;
-  margin:55px auto;
-  padding:30px 22px 36px;
-  max-width:380px;
-  background:rgba(255,255,255,0.83);
-  border-radius:34px;
-  box-shadow:0 14px 36px rgba(0,0,0,0.13);
-}
+    .page {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #3792f2;
+    }
 
-.label{
-  font-size:12px;
-  letter-spacing:4px;
-  color:#f4a900;
-  font-weight:bold;
-}
+    /* 再生される動画 */
+    .movie {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      z-index: 1;
+      transition: opacity 1.4s ease;
+    }
 
-h1{
-  font-size:42px;
-  margin:12px 0 22px;
-  letter-spacing:5px;
-}
+    /* 最初の背景：青と夏.jpgをぼかした背景 */
+    .intro-bg-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      overflow: hidden;
+      opacity: 1;
+      transition: opacity 1.2s ease;
+    }
 
-img{
-  width:285px;
-  max-width:88%;
-  border-radius:28px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.14);
-}
+    .intro-bg {
+      position: absolute;
+      inset: -24px;
+      background-image: url("青と夏.jpg");
+      background-size: cover;
+      background-position: center;
+      filter: blur(24px);
+      transform: scale(1.14);
+    }
 
-button{
-  margin-top:28px;
-  font-size:20px;
-  letter-spacing:3px;
-  padding:17px 48px;
-  border-radius:999px;
-  border:none;
-  background:#ffd43b;
-  color:#155f93;
-  font-weight:bold;
-  cursor:pointer;
-  box-shadow:0 7px 0 #efa900;
-}
+    .intro-bg-blue {
+      position: absolute;
+      inset: 0;
+      background: rgba(55, 146, 242, 0.56);
+    }
 
-button:active{
-  transform:translateY(5px);
-  box-shadow:0 2px 0 #efa900;
-}
+    /* 上部の手書き風ロゴ */
+    .event-logo {
+      position: absolute;
+      top: max(28px, env(safe-area-inset-top));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 6;
+      width: 100%;
+      padding: 0 24px;
+      text-align: center;
+      font-family: "Caveat", cursive;
+      color: rgba(255, 255, 255, 0.94);
+      pointer-events: none;
+      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+      transition: opacity 1.1s ease, transform 1.1s ease;
+    }
 
-.nowplaying{
-  margin-top:20px;
-  font-size:13px;
-  letter-spacing:3px;
-  opacity:0;
-}
+    .event-date {
+      font-size: clamp(22px, 6vw, 36px);
+      font-weight: 700;
+      line-height: 0.95;
+    }
 
-.nowplaying.show{
-  opacity:1;
-}
+    .event-names {
+      font-size: clamp(30px, 8vw, 50px);
+      font-weight: 700;
+      line-height: 1.05;
+    }
 
-.flower{
-  position:absolute;
-  font-size:28px;
-  animation:flowerUp 1.7s ease-out forwards;
-  pointer-events:none;
-  z-index:5;
-}
+    .event-subtitle {
+      font-size: clamp(18px, 4.8vw, 30px);
+      font-weight: 600;
+      line-height: 1;
+      opacity: 0.92;
+    }
 
-@keyframes flowerUp{
-  0%{ transform:translateY(0) rotate(0deg) scale(0.6); opacity:0; }
-  20%{ opacity:1; }
-  100%{ transform:translateY(-130px) rotate(220deg) scale(1.4); opacity:0; }
-}
-</style>
+    /* 最初の視聴サイト風UI */
+    .start-ui {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      transition: opacity 1.1s ease, transform 1.1s ease;
+    }
+
+    .listen-card {
+      width: min(82vw, 360px);
+      padding: 22px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.24);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      text-align: center;
+      margin-top: 76px;
+    }
+
+    .label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      opacity: 0.8;
+      margin-bottom: 10px;
+    }
+
+    .song-title {
+      font-size: clamp(30px, 8vw, 46px);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      margin-bottom: 18px;
+      line-height: 1.15;
+      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
+    }
+
+    .jacket {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+      border-radius: 22px;
+      margin-bottom: 22px;
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.26);
+    }
+
+    .play-button {
+      width: 132px;
+      height: 52px;
+      border-radius: 999px;
+      border: none;
+      background: rgba(255, 255, 255, 0.94);
+      color: #3792f2;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      cursor: pointer;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .play-button:active {
+      transform: scale(0.96);
+    }
+
+    .play-button:disabled {
+      opacity: 0.7;
+      cursor: default;
+    }
+
+    /* 最後の投票画面 */
+    .vote-ui {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      background: #3792f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1.3s ease;
+      text-align: center;
+      padding: 28px;
+    }
+
+    .vote-box {
+      max-width: 760px;
+      padding-top: 86px;
+    }
+
+    .vote-title {
+      font-size: clamp(38px, 11vw, 78px);
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      line-height: 1;
+      margin-bottom: 28px;
+      text-shadow: 0 5px 20px rgba(0, 0, 0, 0.22);
+    }
+
+    .vote-ja {
+      font-size: clamp(18px, 4.8vw, 30px);
+      font-weight: 800;
+      line-height: 1.55;
+      margin-bottom: 18px;
+      text-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    }
+
+    .vote-en {
+      font-size: clamp(15px, 3.8vw, 24px);
+      font-weight: 700;
+      line-height: 1.45;
+      opacity: 0.92;
+      text-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    }
+
+    /* PLAY後 */
+    .page.is-playing .movie {
+      opacity: 1;
+    }
+
+    .page.is-playing .intro-bg-wrap {
+      opacity: 0;
+    }
+
+    .page.is-playing .start-ui {
+      opacity: 0;
+      transform: scale(0.96);
+      pointer-events: none;
+    }
+
+    .page.is-playing .start-logo {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-8px);
+    }
+
+    /* 終了後 */
+    .page.is-finished .movie {
+      opacity: 0;
+    }
+
+    .page.is-finished .vote-ui {
+      opacity: 1;
+    }
+
+    .page.is-finished .vote-logo {
+      opacity: 1;
+    }
+  </style>
 </head>
 
 <body>
+  <main class="page" id="page">
+    <!-- 動画 -->
+    <video
+      class="movie"
+      id="movie"
+      src="青と夏.m4v"
+      playsinline
+      muted
+      preload="auto"
+    ></video>
 
-<div class="cloud one">☁️</div>
-<div class="cloud two">☁️</div>
+    <!-- 音楽 -->
+    <audio
+      id="music"
+      src="青と夏.m4a"
+      preload="auto"
+    ></audio>
 
-<div class="card">
-  <div class="label">RE-ENTRY SONG QUIZ</div>
-  <h1>Candidate B</h1>
+    <!-- 最初のぼかし背景 -->
+    <div class="intro-bg-wrap">
+      <div class="intro-bg"></div>
+      <div class="intro-bg-blue"></div>
+    </div>
 
-  <img src="青と夏.jpg">
+    <!-- 最初の上部ロゴ -->
+    <div class="event-logo start-logo">
+      <div class="event-date">2026.7.19 sun</div>
+      <div class="event-names">Yuki &amp; Saeko</div>
+      <div class="event-subtitle">Song guessing game</div>
+    </div>
 
-  <br>
+    <!-- 最初の視聴サイト風カード -->
+    <div class="start-ui">
+      <div class="listen-card">
+        <div class="label">NOW LISTENING</div>
+        <h1 class="song-title">青と夏</h1>
+        <img class="jacket" src="青と夏.jpg" alt="青と夏">
+        <button class="play-button" id="playButton">PLAY</button>
+      </div>
+    </div>
 
-  <button id="playButton" onclick="playSong()">LISTEN</button>
+    <!-- 最後の投票画面 -->
+    <div class="vote-ui">
+      <div class="event-logo vote-logo">
+        <div class="event-date">2026.7.19 sun</div>
+        <div class="event-names">Yuki &amp; Saeko</div>
+        <div class="event-subtitle">Song guessing game</div>
+      </div>
 
-  <div id="text" class="nowplaying">♪ SUMMER IS PLAYING...</div>
+      <div class="vote-box">
+        <div class="vote-title">VOTE BLUE</div>
 
-  <audio id="song">
-    <source src="青と夏.m4a" type="audio/mp4">
-  </audio>
-</div>
+        <div class="vote-ja">
+          この曲だと思ったら、青に投票して<br>
+          サイリウムをお取りください
+        </div>
 
-<script>
-function playSong(){
-  const song = document.getElementById("song");
-  const button = document.getElementById("playButton");
+        <div class="vote-en">
+          Think this is the song?<br>
+          Vote for blue and grab a blue glow stick!
+        </div>
+      </div>
+    </div>
+  </main>
 
-  song.currentTime = 0;
-  song.play();
+  <script>
+    const page = document.getElementById("page");
+    const movie = document.getElementById("movie");
+    const music = document.getElementById("music");
+    const playButton = document.getElementById("playButton");
 
-  button.innerHTML = "NOW PLAYING";
-  document.getElementById("text").classList.add("show");
+    // 15秒
+    const PLAY_DURATION = 15000;
 
-  for(let i = 0; i < 22; i++){
-    const flower = document.createElement("div");
-    flower.className = "flower";
-    flower.innerHTML = ["🌻","✨","☀️","💙"][Math.floor(Math.random()*4)];
-    flower.style.left = Math.random() * 100 + "vw";
-    flower.style.top = (65 + Math.random() * 25) + "vh";
-    document.body.appendChild(flower);
+    playButton.addEventListener("click", async () => {
+      playButton.disabled = true;
 
-    setTimeout(() => {
-      flower.remove();
-    }, 1800);
-  }
+      movie.currentTime = 0;
+      music.currentTime = 0;
 
-  setTimeout(() => {
-    song.pause();
-    song.currentTime = 0;
-    button.innerHTML = "LISTEN";
-  }, 15000);
-}
-</script>
+      page.classList.add("is-playing");
 
+      try {
+        await movie.play();
+        await music.play();
+      } catch (error) {
+        console.log("再生エラー:", error);
+      }
+
+      setTimeout(() => {
+        movie.pause();
+        music.pause();
+
+        page.classList.remove("is-playing");
+        page.classList.add("is-finished");
+      }, PLAY_DURATION);
+    });
+  </script>
 </body>
 </html>
