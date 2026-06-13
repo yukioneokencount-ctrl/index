@@ -355,15 +355,23 @@
 
 <body>
   <main class="page" id="page">
-    <!-- 縦動画・音入り -->
+    <!-- 縦動画 -->
     <video
       class="movie"
       id="movie"
       src="aotonatsu.mp4"
       playsinline
       webkit-playsinline
+      muted
       preload="metadata"
     ></video>
+
+    <!-- 音楽 -->
+    <audio
+      id="music"
+      src="青と夏.m4a"
+      preload="auto"
+    ></audio>
 
     <!-- 最初のぼかし背景 -->
     <div class="intro-bg-wrap">
@@ -415,6 +423,7 @@
   <script>
     const page = document.getElementById("page");
     const movie = document.getElementById("movie");
+    const music = document.getElementById("music");
     const playButton = document.getElementById("playButton");
 
     const PLAY_DURATION = 15000;
@@ -425,19 +434,29 @@
       page.classList.remove("is-finished");
 
       movie.pause();
+      music.pause();
+
       movie.currentTime = 0;
+      music.currentTime = 0;
 
       page.classList.add("is-playing");
 
       try {
-        movie.muted = false;
-        movie.volume = 1;
-        await movie.play();
+        // iPhone対策：動画はミュート再生、音はaudioで再生
+        movie.muted = true;
+
+        const moviePromise = movie.play();
+        const musicPromise = music.play();
+
+        await Promise.all([moviePromise, musicPromise]);
       } catch (error) {
         console.log("再生エラー:", error);
 
         playButton.disabled = false;
         page.classList.remove("is-playing");
+
+        movie.pause();
+        music.pause();
 
         alert("動画を再生できませんでした。もう一度PLAYを押してください。");
         return;
@@ -445,6 +464,7 @@
 
       setTimeout(() => {
         movie.pause();
+        music.pause();
 
         page.classList.remove("is-playing");
         page.classList.add("is-finished");
